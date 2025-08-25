@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -11,6 +11,8 @@ import Icon from '@/components/ui/icon'
 const Index = () => {
   const [quizStep, setQuizStep] = useState(0)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
   const [quizData, setQuizData] = useState({
     budget: '',
     market: '',
@@ -52,6 +54,46 @@ const Index = () => {
       price: '$750k',
       yield: '14.2%',
       badge: 'Business Bay'
+    },
+    {
+      id: 4,
+      image: '/img/42eda9d0-6a6a-4954-ac8e-421ed8f2659e.jpg',
+      location: 'Салала, Оман',
+      title: 'Beachfront Villa',
+      description: 'Роскошная вилла на берегу с бесконечным бассейном',
+      price: '$1.2M',
+      yield: '11.5%',
+      badge: 'Салала, Оман'
+    },
+    {
+      id: 5,
+      image: '/img/5629448e-b0df-49bc-a5ba-dc9096aaeb78.jpg',
+      location: 'Дубай Даунтаун',
+      title: 'Burj Khalifa View Penthouse',
+      description: 'Пентхаус с видом на Бурдж-Халифа в центре Дубая',
+      price: '$2.5M',
+      yield: '15.8%',
+      badge: 'Downtown Dubai'
+    },
+    {
+      id: 6,
+      image: '/img/c6a8bcd7-bd6b-4151-81f4-d1478054b0b6.jpg',
+      location: 'Абу-Даби',
+      title: 'Waterfront Complex',
+      description: 'Современный комплекс с яхт-мариной и пляжем',
+      price: '$890k',
+      yield: '13.2%',
+      badge: 'Abu Dhabi'
+    },
+    {
+      id: 7,
+      image: '/img/cb3fe29f-955c-438c-a1bf-6ea231a945d1.jpg',
+      location: 'Маскат Хиллс',
+      title: 'Resort-Style Living',
+      description: 'Апартаменты в курортном стиле с видом на горы и море',
+      price: '$650k',
+      yield: '12.3%',
+      badge: 'Muscat Hills'
     }
   ]
 
@@ -112,6 +154,39 @@ const Index = () => {
     }
   }
 
+  // Touch handlers for mobile swipe
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe) {
+      scrollGallery('right')
+    }
+    if (isRightSwipe) {
+      scrollGallery('left')
+    }
+  }
+
+  // Auto-scroll hero background
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex(prev => prev < portfolioProperties.length - 1 ? prev + 1 : 0)
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <div className="min-h-screen bg-luxury-white">
       {/* Header */}
@@ -130,11 +205,30 @@ const Index = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center overflow-hidden">
+      <section className="relative h-screen flex items-center overflow-hidden" 
+        onTouchStart={onTouchStart} 
+        onTouchMove={onTouchMove} 
+        onTouchEnd={onTouchEnd}
+      >
+        {/* Video Background */}
+        <div className="absolute inset-0">
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className="w-full h-full object-cover opacity-30"
+          >
+            <source src="https://videos.pexels.com/video-files/6101/6101-uhd_4096_2160_24fps.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-luxury-black/60 to-luxury-black/40" />
+        </div>
+        
+        {/* Dynamic Background Images */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 mix-blend-overlay"
           style={{
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${portfolioProperties[currentImageIndex].image}')`
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('${portfolioProperties[currentImageIndex].image}')`
           }}
         />
         
