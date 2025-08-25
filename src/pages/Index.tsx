@@ -147,10 +147,11 @@ const Index = () => {
   }
 
   const scrollGallery = (direction: 'left' | 'right') => {
+    const maxIndex = Math.ceil(portfolioProperties.length / 3) - 1
     if (direction === 'left') {
-      setCurrentImageIndex(prev => prev > 0 ? prev - 1 : portfolioProperties.length - 1)
+      setCurrentImageIndex(prev => prev > 0 ? prev - 1 : maxIndex)
     } else {
-      setCurrentImageIndex(prev => prev < portfolioProperties.length - 1 ? prev + 1 : 0)
+      setCurrentImageIndex(prev => prev < maxIndex ? prev + 1 : 0)
     }
   }
 
@@ -179,10 +180,12 @@ const Index = () => {
     }
   }
 
-  // Auto-scroll hero background
+  // Auto-scroll hero background (separate from gallery)
+  const [heroImageIndex, setHeroImageIndex] = useState(0)
+  
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImageIndex(prev => prev < portfolioProperties.length - 1 ? prev + 1 : 0)
+      setHeroImageIndex(prev => prev < portfolioProperties.length - 1 ? prev + 1 : 0)
     }, 5000)
     return () => clearInterval(interval)
   }, [])
@@ -228,7 +231,7 @@ const Index = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 mix-blend-overlay"
           style={{
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('${portfolioProperties[currentImageIndex].image}')`
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('${portfolioProperties[heroImageIndex].image}')`
           }}
         />
         
@@ -330,14 +333,14 @@ const Index = () => {
         {/* Background Image Navigation */}
         <div className="absolute bottom-8 right-8 flex space-x-4 z-20">
           <Button 
-            onClick={() => scrollGallery('left')}
+            onClick={() => setHeroImageIndex(prev => prev > 0 ? prev - 1 : portfolioProperties.length - 1)}
             size="sm"
             className="bg-gold/80 hover:bg-gold text-luxury-black rounded-full w-12 h-12 p-0 transform transition-all duration-300 hover:scale-110 hover:shadow-lg active:scale-95"
           >
             <Icon name="ChevronLeft" className="h-5 w-5" />
           </Button>
           <Button 
-            onClick={() => scrollGallery('right')}
+            onClick={() => setHeroImageIndex(prev => prev < portfolioProperties.length - 1 ? prev + 1 : 0)}
             size="sm"
             className="bg-gold/80 hover:bg-gold text-luxury-black rounded-full w-12 h-12 p-0 transform transition-all duration-300 hover:scale-110 hover:shadow-lg active:scale-95"
           >
@@ -350,9 +353,9 @@ const Index = () => {
           {portfolioProperties.map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentImageIndex(index)}
+              onClick={() => setHeroImageIndex(index)}
               className={`w-3 h-3 rounded-full transition-all duration-300 transform hover:scale-125 ${
-                index === currentImageIndex 
+                index === heroImageIndex 
                   ? 'bg-gold scale-110' 
                   : 'bg-luxury-white/50 hover:bg-luxury-white/80'
               }`}
@@ -413,120 +416,122 @@ const Index = () => {
           
           {/* Interactive Gallery Carousel */}
           <div className="relative mb-12">
-            <div 
-              ref={galleryRef}
-              className="flex transition-transform duration-500 ease-in-out gap-8 overflow-hidden"
-              style={{ 
-                transform: `translateX(-${currentImageIndex * 100}%)`,
-                width: `${portfolioProperties.length * 100}%`
-              }}
-            >
-              {portfolioProperties.map((property, index) => (
-                <div 
-                  key={property.id} 
-                  className="flex-shrink-0 w-full grid md:grid-cols-3 gap-8"
-                  style={{ width: `${100 / portfolioProperties.length}%` }}
-                >
-                  <Card className={`overflow-hidden border-none shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 animate-scale-in`}>
-                    <div 
-                      className="h-64 bg-cover bg-center transition-transform duration-700 hover:scale-110" 
-                      style={{backgroundImage: `url('${property.image}')`}} 
-                    />
-                    <CardContent className="p-6">
-                      <Badge className="bg-gold text-luxury-black font-montserrat mb-3 animate-pulse">
-                        {property.badge}
-                      </Badge>
-                      <CardTitle className="font-montserrat text-xl mb-2">{property.title}</CardTitle>
-                      <CardDescription className="font-open-sans mb-4">
-                        {property.description}
-                      </CardDescription>
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <div className="text-2xl font-montserrat font-bold text-gold">{property.price}</div>
-                          <div className="text-sm text-gray-500 font-open-sans">Стоимость</div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-2xl font-montserrat font-bold text-green-600 animate-pulse">{property.yield}</div>
-                          <div className="text-sm text-gray-500 font-open-sans">Годовая доходность</div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+            {/* Gallery Container */}
+            <div className="overflow-hidden rounded-lg">
+              <div 
+                ref={galleryRef}
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ 
+                  transform: `translateX(-${currentImageIndex * 33.333}%)`,
+                  width: `${Math.ceil(portfolioProperties.length / 3) * 100}%`
+                }}
+                onTouchStart={onTouchStart}
+                onTouchMove={onTouchMove}
+                onTouchEnd={onTouchEnd}
+              >
+                {Array.from({ length: Math.ceil(portfolioProperties.length / 3) }).map((_, slideIndex) => (
+                  <div key={slideIndex} className="w-full flex-shrink-0 grid md:grid-cols-3 gap-6 px-2">
+                    {portfolioProperties.slice(slideIndex * 3, (slideIndex + 1) * 3).map((property, cardIndex) => (
+                      <Card key={property.id} className="overflow-hidden border-none shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 animate-scale-in" style={{animationDelay: `${cardIndex * 200}ms`}}>
+                        <div 
+                          className="h-64 bg-cover bg-center transition-transform duration-700 hover:scale-110" 
+                          style={{backgroundImage: `url('${property.image}')`}} 
+                        />
+                        <CardContent className="p-6">
+                          <Badge className="bg-gold text-luxury-black font-montserrat mb-3 animate-pulse">
+                            {property.badge}
+                          </Badge>
+                          <CardTitle className="font-montserrat text-xl mb-2">{property.title}</CardTitle>
+                          <CardDescription className="font-open-sans mb-4">
+                            {property.description}
+                          </CardDescription>
+                          
+                          {/* Property Details */}
+                          <div className="space-y-2 mb-4">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600 font-open-sans">Площадь:</span>
+                              <span className="font-semibold">
+                                {property.id === 1 ? '85 м²' : 
+                                 property.id === 2 ? '92 м²' : 
+                                 property.id === 3 ? '120 м²' : 
+                                 property.id === 4 ? '350 м²' : 
+                                 property.id === 5 ? '180 м²' : 
+                                 property.id === 6 ? '110 м²' : '95 м²'}
+                              </span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600 font-open-sans">Спальни:</span>
+                              <span className="font-semibold">
+                                {property.id === 1 ? '2' : 
+                                 property.id === 2 ? '2' : 
+                                 property.id === 3 ? '3' : 
+                                 property.id === 4 ? '4' : 
+                                 property.id === 5 ? '3' : 
+                                 property.id === 6 ? '3' : '2'}
+                              </span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600 font-open-sans">Срок сдачи:</span>
+                              <span className="font-semibold text-green-600">
+                                {property.id === 1 ? 'Q4 2024' : 
+                                 property.id === 2 ? 'Q2 2025' : 
+                                 property.id === 3 ? 'Q3 2024' : 
+                                 property.id === 4 ? 'Q1 2025' : 
+                                 property.id === 5 ? 'Готов' : 
+                                 property.id === 6 ? 'Q4 2024' : 'Q1 2025'}
+                              </span>
+                            </div>
+                          </div>
 
-                  {/* Show next 2 properties if available */}
-                  {portfolioProperties[index + 1] && (
-                    <Card className="overflow-hidden border-none shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 animate-scale-in animation-delay-200">
-                      <div 
-                        className="h-64 bg-cover bg-center transition-transform duration-700 hover:scale-110" 
-                        style={{backgroundImage: `url('${portfolioProperties[index + 1]?.image}')`}} 
-                      />
-                      <CardContent className="p-6">
-                        <Badge className="bg-gold text-luxury-black font-montserrat mb-3 animate-pulse">
-                          {portfolioProperties[index + 1]?.badge}
-                        </Badge>
-                        <CardTitle className="font-montserrat text-xl mb-2">{portfolioProperties[index + 1]?.title}</CardTitle>
-                        <CardDescription className="font-open-sans mb-4">
-                          {portfolioProperties[index + 1]?.description}
-                        </CardDescription>
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <div className="text-2xl font-montserrat font-bold text-gold">{portfolioProperties[index + 1]?.price}</div>
-                            <div className="text-sm text-gray-500 font-open-sans">Стоимость</div>
+                          <div className="flex justify-between items-center pt-4 border-t border-gray-200">
+                            <div>
+                              <div className="text-2xl font-montserrat font-bold text-gold">{property.price}</div>
+                              <div className="text-sm text-gray-500 font-open-sans">Стоимость</div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-2xl font-montserrat font-bold text-green-600 animate-pulse">{property.yield}</div>
+                              <div className="text-sm text-gray-500 font-open-sans">Годовая доходность</div>
+                            </div>
                           </div>
-                          <div className="text-right">
-                            <div className="text-2xl font-montserrat font-bold text-green-600 animate-pulse">{portfolioProperties[index + 1]?.yield}</div>
-                            <div className="text-sm text-gray-500 font-open-sans">Годовая доходность</div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
-
-                  {portfolioProperties[index + 2] && (
-                    <Card className="overflow-hidden border-none shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 animate-scale-in animation-delay-400">
-                      <div 
-                        className="h-64 bg-cover bg-center transition-transform duration-700 hover:scale-110" 
-                        style={{backgroundImage: `url('${portfolioProperties[index + 2]?.image}')`}} 
-                      />
-                      <CardContent className="p-6">
-                        <Badge className="bg-gold text-luxury-black font-montserrat mb-3 animate-pulse">
-                          {portfolioProperties[index + 2]?.badge}
-                        </Badge>
-                        <CardTitle className="font-montserrat text-xl mb-2">{portfolioProperties[index + 2]?.title}</CardTitle>
-                        <CardDescription className="font-open-sans mb-4">
-                          {portfolioProperties[index + 2]?.description}
-                        </CardDescription>
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <div className="text-2xl font-montserrat font-bold text-gold">{portfolioProperties[index + 2]?.price}</div>
-                            <div className="text-sm text-gray-500 font-open-sans">Стоимость</div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-2xl font-montserrat font-bold text-green-600 animate-pulse">{portfolioProperties[index + 2]?.yield}</div>
-                            <div className="text-sm text-gray-500 font-open-sans">Годовая доходность</div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
-                </div>
-              ))}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Gallery Navigation Controls */}
             <div className="absolute top-1/2 -translate-y-1/2 left-4 right-4 flex justify-between pointer-events-none">
               <Button 
                 onClick={() => scrollGallery('left')}
-                className="bg-gold/90 hover:bg-gold text-luxury-black rounded-full w-12 h-12 p-0 transform transition-all duration-300 hover:scale-110 hover:shadow-lg active:scale-95 pointer-events-auto"
+                className="bg-gold/90 hover:bg-gold text-luxury-black rounded-full w-12 h-12 p-0 transform transition-all duration-300 hover:scale-110 hover:shadow-lg active:scale-95 pointer-events-auto shadow-lg"
+                disabled={currentImageIndex === 0}
               >
                 <Icon name="ChevronLeft" className="h-6 w-6" />
               </Button>
               <Button 
                 onClick={() => scrollGallery('right')}
-                className="bg-gold/90 hover:bg-gold text-luxury-black rounded-full w-12 h-12 p-0 transform transition-all duration-300 hover:scale-110 hover:shadow-lg active:scale-95 pointer-events-auto"
+                className="bg-gold/90 hover:bg-gold text-luxury-black rounded-full w-12 h-12 p-0 transform transition-all duration-300 hover:scale-110 hover:shadow-lg active:scale-95 pointer-events-auto shadow-lg"
+                disabled={currentImageIndex >= Math.ceil(portfolioProperties.length / 3) - 1}
               >
                 <Icon name="ChevronRight" className="h-6 w-6" />
               </Button>
+            </div>
+
+            {/* Gallery Dots Indicator */}
+            <div className="flex justify-center mt-8 space-x-2">
+              {Array.from({ length: Math.ceil(portfolioProperties.length / 3) }).map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 transform hover:scale-125 ${
+                    index === currentImageIndex 
+                      ? 'bg-gold scale-110' 
+                      : 'bg-gray-300 hover:bg-gray-400'
+                  }`}
+                />
+              ))}
             </div>
           </div>
           
