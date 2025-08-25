@@ -234,12 +234,12 @@ const Index = () => {
         
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-luxury-white">
           <div className="max-w-3xl animate-slide-in-left">
-            <h1 className="text-5xl md:text-7xl font-montserrat font-bold mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-montserrat font-bold mb-6 leading-tight">
               Премиум-апартаменты в ОАЭ и Омане
-              <span className="block text-gold animate-fade-in animation-delay-500">Ваш пассивный доход от 12% годовых</span>
+              <span className="block text-gold animate-fade-in animation-delay-500 mt-2">Ваш пассивный доход от 12% годовых</span>
             </h1>
             
-            <p className="text-xl md:text-2xl font-open-sans mb-8 text-gray-200 leading-relaxed animate-fade-in animation-delay-1000">
+            <p className="text-lg md:text-xl font-open-sans mb-8 text-gray-200 leading-relaxed animate-fade-in animation-delay-1000">
               Персональный подбор ликвидных объектов инвестиции с полным сопровождением и юридической гарантией
             </p>
             
