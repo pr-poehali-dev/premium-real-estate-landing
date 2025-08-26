@@ -235,32 +235,32 @@ const Index = () => {
           }}
         />
         
-        <div className="relative z-10 max-w-7xl mx-auto px-6 text-luxury-white">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 text-luxury-white">
           <div className="max-w-3xl animate-slide-in-left">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-montserrat font-bold mb-6 leading-tight">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-montserrat font-bold mb-4 sm:mb-6 leading-tight">
               Премиум-апартаменты в ОАЭ и Омане
               <span className="block text-gold animate-fade-in animation-delay-500 mt-2">Ваш пассивный доход от 12% годовых</span>
             </h1>
             
-            <p className="text-lg md:text-xl font-open-sans mb-8 text-gray-200 leading-relaxed animate-fade-in animation-delay-1000">
+            <p className="text-base sm:text-lg md:text-xl font-open-sans mb-6 sm:mb-8 text-gray-200 leading-relaxed animate-fade-in animation-delay-1000">
               Персональный подбор ликвидных объектов инвестиции с полным сопровождением и юридической гарантией
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 mb-12 animate-slide-in-right animation-delay-1500">
-              <Button className="bg-gold hover:bg-gold-dark text-luxury-black font-montserrat font-semibold px-8 py-4 text-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95">
+            <div className="flex flex-col sm:flex-row gap-4 mb-8 sm:mb-12 animate-slide-in-right animation-delay-1500">
+              <Button className="bg-gold hover:bg-gold-dark text-luxury-black font-montserrat font-semibold px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 min-h-[48px]">
                 Получить каталог ликвидных объектов
               </Button>
               
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="outline" className="border-gold text-gold hover:bg-gold hover:text-luxury-black font-montserrat font-semibold px-8 py-4 text-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95">
-                    <Icon name="Play" className="mr-2 h-5 w-5 animate-pulse" />
+                  <Button variant="outline" className="border-gold text-gold hover:bg-gold hover:text-luxury-black font-montserrat font-semibold px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 min-h-[48px]">
+                    <Icon name="Play" className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-pulse" />
                     Начать квиз
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[600px] bg-luxury-white animate-scale-in">
+                <DialogContent className="w-[95vw] max-w-[600px] max-h-[90vh] overflow-y-auto bg-luxury-white animate-scale-in">
                   <DialogHeader>
-                    <DialogTitle className="text-2xl font-montserrat font-bold text-luxury-black text-center">
+                    <DialogTitle className="text-lg sm:text-2xl font-montserrat font-bold text-luxury-black text-center leading-tight">
                       {quizStep < quizQuestions.length ? quizQuestions[quizStep].title : 'Идеальное решение для ваших задач уже подобрано!'}
                     </DialogTitle>
                   </DialogHeader>
@@ -269,9 +269,9 @@ const Index = () => {
                     <div className="py-6 animate-fade-in">
                       <RadioGroup onValueChange={handleQuizAnswer} className="space-y-4">
                         {quizQuestions[quizStep].options.map((option, index) => (
-                          <div key={option.value} className={`flex items-center space-x-2 p-3 rounded-lg hover:bg-gold/10 transition-all duration-300 animate-fade-in`} style={{animationDelay: `${index * 100}ms`}}>
+                          <div key={option.value} className={`flex items-center space-x-2 p-3 rounded-lg hover:bg-gold/10 transition-all duration-300 animate-fade-in min-h-[48px]`} style={{animationDelay: `${index * 100}ms`}}>
                             <RadioGroupItem value={option.value} id={option.value} />
-                            <Label htmlFor={option.value} className="font-open-sans text-lg cursor-pointer transform transition-all duration-200 hover:scale-105">
+                            <Label htmlFor={option.value} className="font-open-sans text-base sm:text-lg cursor-pointer transform transition-all duration-200 hover:scale-105">
                               {option.label}
                             </Label>
                           </div>
@@ -285,35 +285,35 @@ const Index = () => {
                       </p>
                       <form onSubmit={handleContactSubmit} className="space-y-4">
                         <div className="animate-slide-in-left">
-                          <Label htmlFor="name" className="font-open-sans font-semibold">Имя</Label>
+                          <Label htmlFor="name" className="font-open-sans font-semibold text-sm sm:text-base">Имя</Label>
                           <Input 
                             id="name"
                             value={quizData.name}
                             onChange={(e) => setQuizData(prev => ({...prev, name: e.target.value}))}
-                            className="mt-1 transition-all duration-300 focus:scale-105"
+                            className="mt-1 transition-all duration-300 focus:scale-105 h-12 text-base"
                           />
                         </div>
                         <div className="animate-slide-in-right animation-delay-200">
-                          <Label htmlFor="phone" className="font-open-sans font-semibold">Телефон *</Label>
+                          <Label htmlFor="phone" className="font-open-sans font-semibold text-sm sm:text-base">Телефон *</Label>
                           <Input 
                             id="phone"
                             value={quizData.phone}
                             onChange={(e) => setQuizData(prev => ({...prev, phone: e.target.value}))}
                             required
-                            className="mt-1 transition-all duration-300 focus:scale-105"
+                            className="mt-1 transition-all duration-300 focus:scale-105 h-12 text-base"
                           />
                         </div>
                         <div className="animate-slide-in-left animation-delay-400">
-                          <Label htmlFor="email" className="font-open-sans font-semibold">Email</Label>
+                          <Label htmlFor="email" className="font-open-sans font-semibold text-sm sm:text-base">Email</Label>
                           <Input 
                             id="email"
                             type="email"
                             value={quizData.email}
                             onChange={(e) => setQuizData(prev => ({...prev, email: e.target.value}))}
-                            className="mt-1 transition-all duration-300 focus:scale-105"
+                            className="mt-1 transition-all duration-300 focus:scale-105 h-12 text-base"
                           />
                         </div>
-                        <Button type="submit" className="w-full bg-gold hover:bg-gold-dark text-luxury-black font-montserrat font-semibold py-3 transform transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 animate-fade-in animation-delay-600">
+                        <Button type="submit" className="w-full bg-gold hover:bg-gold-dark text-luxury-black font-montserrat font-semibold py-3 h-12 text-base transform transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 animate-fade-in animation-delay-600">
                           Получить подборку
                         </Button>
                       </form>
@@ -331,30 +331,30 @@ const Index = () => {
         </div>
 
         {/* Background Image Navigation */}
-        <div className="absolute bottom-8 right-8 flex space-x-4 z-20">
+        <div className="absolute bottom-4 sm:bottom-8 right-2 sm:right-8 flex space-x-2 sm:space-x-4 z-20">
           <Button 
             onClick={() => setHeroImageIndex(prev => prev > 0 ? prev - 1 : portfolioProperties.length - 1)}
             size="sm"
-            className="bg-gold/80 hover:bg-gold text-luxury-black rounded-full w-12 h-12 p-0 transform transition-all duration-300 hover:scale-110 hover:shadow-lg active:scale-95"
+            className="bg-gold/80 hover:bg-gold text-luxury-black rounded-full w-10 h-10 sm:w-12 sm:h-12 p-0 transform transition-all duration-300 hover:scale-110 hover:shadow-lg active:scale-95"
           >
-            <Icon name="ChevronLeft" className="h-5 w-5" />
+            <Icon name="ChevronLeft" className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
           <Button 
             onClick={() => setHeroImageIndex(prev => prev < portfolioProperties.length - 1 ? prev + 1 : 0)}
             size="sm"
-            className="bg-gold/80 hover:bg-gold text-luxury-black rounded-full w-12 h-12 p-0 transform transition-all duration-300 hover:scale-110 hover:shadow-lg active:scale-95"
+            className="bg-gold/80 hover:bg-gold text-luxury-black rounded-full w-10 h-10 sm:w-12 sm:h-12 p-0 transform transition-all duration-300 hover:scale-110 hover:shadow-lg active:scale-95"
           >
-            <Icon name="ChevronRight" className="h-5 w-5" />
+            <Icon name="ChevronRight" className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
         </div>
 
         {/* Hero Navigation Dots */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+        <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
           {portfolioProperties.map((_, index) => (
             <button
               key={index}
               onClick={() => setHeroImageIndex(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 transform hover:scale-125 ${
+              className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 transform hover:scale-125 min-h-[12px] min-w-[12px] ${
                 index === heroImageIndex 
                   ? 'bg-gold scale-110' 
                   : 'bg-luxury-white/50 hover:bg-luxury-white/80'
@@ -430,19 +430,19 @@ const Index = () => {
                 onTouchEnd={onTouchEnd}
               >
                 {Array.from({ length: Math.ceil(portfolioProperties.length / 3) }).map((_, slideIndex) => (
-                  <div key={slideIndex} className="w-full flex-shrink-0 grid md:grid-cols-3 gap-6 px-2">
+                  <div key={slideIndex} className="w-full flex-shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 px-2">
                     {portfolioProperties.slice(slideIndex * 3, (slideIndex + 1) * 3).map((property, cardIndex) => (
                       <Card key={property.id} className="overflow-hidden border-none shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 animate-scale-in" style={{animationDelay: `${cardIndex * 200}ms`}}>
                         <div 
-                          className="h-64 bg-cover bg-center transition-transform duration-700 hover:scale-110" 
+                          className="h-48 sm:h-64 bg-cover bg-center transition-transform duration-700 hover:scale-110" 
                           style={{backgroundImage: `url('${property.image}')`}} 
                         />
-                        <CardContent className="p-6">
+                        <CardContent className="p-4 sm:p-6">
                           <Badge className="bg-gold text-luxury-black font-montserrat mb-3 animate-pulse">
                             {property.badge}
                           </Badge>
-                          <CardTitle className="font-montserrat text-xl mb-2">{property.title}</CardTitle>
-                          <CardDescription className="font-open-sans mb-4">
+                          <CardTitle className="font-montserrat text-lg sm:text-xl mb-2">{property.title}</CardTitle>
+                          <CardDescription className="font-open-sans mb-4 text-sm sm:text-base">
                             {property.description}
                           </CardDescription>
                           
@@ -483,14 +483,14 @@ const Index = () => {
                             </div>
                           </div>
 
-                          <div className="flex justify-between items-center pt-4 border-t border-gray-200">
+                          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pt-4 border-t border-gray-200 gap-2 sm:gap-0">
                             <div>
-                              <div className="text-2xl font-montserrat font-bold text-gold">{property.price}</div>
-                              <div className="text-sm text-gray-500 font-open-sans">Стоимость</div>
+                              <div className="text-xl sm:text-2xl font-montserrat font-bold text-gold">{property.price}</div>
+                              <div className="text-xs sm:text-sm text-gray-500 font-open-sans">Стоимость</div>
                             </div>
-                            <div className="text-right">
-                              <div className="text-2xl font-montserrat font-bold text-green-600 animate-pulse">{property.yield}</div>
-                              <div className="text-sm text-gray-500 font-open-sans">Годовая доходность</div>
+                            <div className="text-left sm:text-right">
+                              <div className="text-xl sm:text-2xl font-montserrat font-bold text-green-600 animate-pulse">{property.yield}</div>
+                              <div className="text-xs sm:text-sm text-gray-500 font-open-sans">Годовая доходность</div>
                             </div>
                           </div>
                         </CardContent>
@@ -502,30 +502,30 @@ const Index = () => {
             </div>
 
             {/* Gallery Navigation Controls */}
-            <div className="absolute top-1/2 -translate-y-1/2 left-4 right-4 flex justify-between pointer-events-none">
+            <div className="absolute top-1/2 -translate-y-1/2 left-2 right-2 sm:left-4 sm:right-4 flex justify-between pointer-events-none">
               <Button 
                 onClick={() => scrollGallery('left')}
-                className="bg-gold/90 hover:bg-gold text-luxury-black rounded-full w-12 h-12 p-0 transform transition-all duration-300 hover:scale-110 hover:shadow-lg active:scale-95 pointer-events-auto shadow-lg"
+                className="bg-gold/90 hover:bg-gold text-luxury-black rounded-full w-10 h-10 sm:w-12 sm:h-12 p-0 transform transition-all duration-300 hover:scale-110 hover:shadow-lg active:scale-95 pointer-events-auto shadow-lg"
                 disabled={currentImageIndex === 0}
               >
-                <Icon name="ChevronLeft" className="h-6 w-6" />
+                <Icon name="ChevronLeft" className="h-5 w-5 sm:h-6 sm:w-6" />
               </Button>
               <Button 
                 onClick={() => scrollGallery('right')}
-                className="bg-gold/90 hover:bg-gold text-luxury-black rounded-full w-12 h-12 p-0 transform transition-all duration-300 hover:scale-110 hover:shadow-lg active:scale-95 pointer-events-auto shadow-lg"
+                className="bg-gold/90 hover:bg-gold text-luxury-black rounded-full w-10 h-10 sm:w-12 sm:h-12 p-0 transform transition-all duration-300 hover:scale-110 hover:shadow-lg active:scale-95 pointer-events-auto shadow-lg"
                 disabled={currentImageIndex >= Math.ceil(portfolioProperties.length / 3) - 1}
               >
-                <Icon name="ChevronRight" className="h-6 w-6" />
+                <Icon name="ChevronRight" className="h-5 w-5 sm:h-6 sm:w-6" />
               </Button>
             </div>
 
             {/* Gallery Dots Indicator */}
-            <div className="flex justify-center mt-8 space-x-2">
+            <div className="flex justify-center mt-6 sm:mt-8 space-x-2">
               {Array.from({ length: Math.ceil(portfolioProperties.length / 3) }).map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentImageIndex(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 transform hover:scale-125 ${
+                  className={`w-3 h-3 rounded-full transition-all duration-300 transform hover:scale-125 min-h-[12px] min-w-[12px] ${
                     index === currentImageIndex 
                       ? 'bg-gold scale-110' 
                       : 'bg-gray-300 hover:bg-gray-400'
@@ -535,8 +535,8 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="text-center animate-fade-in">
-            <Button className="bg-gold hover:bg-gold-dark text-luxury-black font-montserrat font-semibold px-8 py-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95">
+          <div className="text-center animate-fade-in px-4">
+            <Button className="bg-gold hover:bg-gold-dark text-luxury-black font-montserrat font-semibold px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 w-full sm:w-auto min-h-[48px]">
               Посмотреть другие кейсы
             </Button>
           </div>
